@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KT Recruiting • Player Profiles</title>
+  <meta name="description" content="KT Recruiting player profile template – multi-profile with head-to-head comparison." />
+  <meta property="og:title" content="KT Recruiting • Player Profiles" />
+  <meta property="og:type" content="website" />
+  <meta property="og:description" content="KT Recruiting player profile template – multi-profile with head-to-head comparison." />
+  <meta property="og:image" content="" />
+  <meta name="color-scheme" content="dark light">
+  <style>
+    :root{
+      --bg:#0b0c10; --panel:#11131a; --muted:#8b90a2; --text:#e9ecf1; --brand:#f5c245; --accent:#2dd4bf; --danger:#ef4444; --ok:#22c55e;
+      --ring: 0 0 0 2px rgba(245,194,69,.35), 0 10px 25px rgba(0,0,0,.45);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji"}
+    body{background:linear-gradient(180deg, #0b0c10 0%, #0e1117 60%, #0b0c10 100%); color:var(--text)}
+    .container{max-width:1180px;margin:32px auto;padding:24px}
+    .grid{display:grid;grid-template-columns: 380px 1fr; gap:24px}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:var(--radius); box-shadow:var(--ring)}
+    .card .hd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.12);padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.03)}
+    .pill .dot{width:8px;height:8px;border-radius:999px;background:var(--ok)}
+
+    .profile{padding:20px}
+    .headshot{position:relative;border-radius:calc(var(--radius) - 6px);overflow:hidden;aspect-ratio:3/4;background:#0a0c12;border:1px solid rgba(255,255,255,.06)}
+    .headshot img{width:100%;height:100%;object-fit:cover;display:block}
+    .badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(245,194,69,.08)}
+    .badge svg{width:16px;height:16px}
+
+    .player-meta{margin-top:16px;display:grid;gap:10px}
+    .meta-row{display:flex;flex-wrap:wrap;gap:8px}
+    .chip{padding:8px 10px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text)}
+
+    .ratings{padding:20px}
+    .rating-row{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:14px 0}
+    .rating-label{min-width:140px;opacity:.9}
+    .stars{display:inline-flex;gap:6px}
+    .stars svg{width:22px;height:22px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.35))}
+    .muted{color:var(--muted)}
+
+    .panel{padding:20px}
+    .panel h3{margin:0 0 14px;font-size:18px;letter-spacing:.2px}
+    .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    @media(max-width:720px){.kpi-row{grid-template-columns:repeat(2,1fr)}}
+    .kpi{padding:16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:6px}
+    .kpi .v{font-size:22px;font-weight:700}
+    .kpi .l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+
+    .timeline{display:grid;gap:12px}
+    .t-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}
+    .t-item .t-ic{width:24px;height:24px;opacity:.85}
+
+    .links{display:flex;flex-wrap:wrap;gap:10px}
+    .link{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.03);text-decoration:none;color:var(--text)}
+
+    .brand-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#f5c245,#b88a22);display:grid;place-items:center;color:#1a1203;font-weight:900}
+    .title{font-weight:800;letter-spacing:.3px}
+    .watermark{opacity:.6}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+    /* Top actions */
+    .top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    #printBtn,#compareBtn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer}
+    select#profileSelect{padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:var(--text)}
+
+    /* Admin UI */
+    .admin-toggle{display:none}
+    .gear{position:fixed;right:20px;bottom:20px;border:1px solid rgba(255,255,255,.12);background:#121521;border-radius:999px;padding:12px;box-shadow:var(--ring);cursor:pointer}
+    .drawer{position:fixed;top:0;right:-560px;width:560px;max-width:95vw;height:100%;background:#0d1117;border-left:1px solid rgba(255,255,255,.1);box-shadow:-12px 0 40px rgba(0,0,0,.45);transition:right .25s ease}
+    .drawer.open{right:0}
+    .drawer .bar{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+    .form{padding:16px 18px 120px;overflow:auto;height:calc(100% - 60px);}/* prevent drawer from exceeding viewport */
+    .field{display:grid;gap:6px;margin-bottom:12px}
+    .field label{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+    .field input, .field select, .field textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:var(--text)}
+    .twocol{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btns{position:sticky;bottom:0;display:flex;gap:8px;background:linear-gradient(180deg, transparent, #0d1117 40%);padding:12px 18px;flex-wrap:wrap}
+    .btn{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer}
+    .btn.primary{background:linear-gradient(135deg,#f5c245,#b88a22);color:#1a1203;font-weight:800}
+    .note{font-size:12px;color:var(--muted)}
+
+    /* Compare */
+    .compare{margin-top:24px}
+    .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .cmp-card{padding:16px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+    .cmp-hd{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .cmp-hd .pic{width:64px;height:64px;border-radius:12px;overflow:hidden;background:#0a0c12;border:1px solid rgba(255,255,255,.06)}
+    .cmp-hd .pic img{width:100%;height:100%;object-fit:cover}
+    .cmp-row{display:flex;align-items:center;justify-content:space-between;margin:10px 0}
+    .cmp-row .label{color:var(--muted)}
+
+    /* Self-test panel */
+    #testPanel{display:none;margin-top:20px}
+    #testPanel ul{margin:0;padding-left:18px}
+    #testPanel li{margin:6px 0}
+
+    /* Print stylesheet overrides (inline to keep 1 file) */
+    @media print{
+      @page { size: A4 portrait; margin: 0.5in; }
+      :root{ --text:#000; --muted:#444; }
+      body{ background:#fff !important; color:#000 !important; }
+      .container{ max-width:100%; margin:0; padding:0; }
+      .brand-bar{ margin-bottom:8px; }
+      .logo{ background:#000 !important; color:#fff !important; }
+      .grid{ grid-template-columns: 1fr !important; gap:10px !important; }
+      .card{ background:#fff !important; border:1px solid #ddd !important; box-shadow:none !important; }
+      .pill{ border-color:#bbb !important; background:#fff !important; }
+      .badge{ background:#fff !important; border-color:#bbb !important; }
+      .kpi{ background:#fff !important; border-color:#ddd !important; }
+      .muted{ color:#444 !important; }
+      .gear, .drawer, .btn, .btns, #gearBtn, #runTestsBtn, #testPanel, .watermark { display:none !important; }
+      .link::after{ content:" (" attr(href) ")"; font-size:10px; color:#555; }
+      .headshot{ border-color:#ccc !important; }
+      .t-item{ break-inside: avoid; }
+      .page-break{ break-after: page; }
+    }
+  </style>
+
+  <script type="text/javascript">
+  (function(){
+    function onReady(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded', fn); }
+
+    onReady(function(){
+      // --- DEFAULT SINGLE PROFILE (ES5-compatible) ---
+      var defaultPlayerData = {
+        id: String(Date.now()),
+        status: "Active Recruit",
+        gradYear: 2026,
+        headshotUrl: "https://images.unsplash.com/photo-1598986646512-9418f9d5f0f9?q=80&w=600&auto=format&fit=crop",
+        name: "Harran Zureikat",
+        position: "K / P",
+        highSchool: "Fox Chapel HS",
+        city: "Pittsburgh",
+        state: "PA",
+        height: "6'0\"",
+        weight: "185 lb",
+        foot: "Right",
+        surface: "Off a Tee",
+        badges: [ { label: "KT Certified", icon: "medal" }, { label: "NFL Potential", icon: "shield" } ],
+        ratings: [ { source: "KT Recruiting", max: 5, value: 5 }, { source: "Kohl's Kicking", max: 5, value: 5 }, { source: "Chris Sailer", max: 6, value: 6 } ],
+        stats2025: [
+          { label: "FGM / FGA", value: "12 / 15" },
+          { label: "FG Long", value: "52 yds" },
+          { label: "XPM / XPA", value: "31 / 32" },
+          { label: "Kickoffs", value: "48" },
+          { label: "Touchbacks", value: "29" },
+          { label: "Punt Avg", value: "42.8" },
+          { label: "Best Hang", value: "4.58 s" },
+          { label: "Inside 20", value: "12" }
+        ],
+        timeline: [
+          { date: "2025-03-12", label: "First D1 Offer" },
+          { date: "2025-04-05", label: "Unofficial Visit" },
+          { date: "2025-06-22", label: "Official Visit" },
+          { date: "2025-07-18", label: "Committed" },
+          { date: "2025-12-18", label: "Signed NLI" }
+        ],
+        links: [
+          { label: "Hudl", url: "https://www.hudl.com/profile/" },
+          { label: "Twitter", url: "https://twitter.com/" },
+          { label: "Instagram", url: "https://instagram.com/" },
+          { label: "YouTube", url: "https://youtube.com/" }
+        ]
+      };
+
+      var LS_PROFILES = 'kt_profiles_v1';
+      var LS_CURRENT = 'kt_current_profile_id';
+
+      function loadProfiles(){
+        try{
+          var raw = localStorage.getItem(LS_PROFILES);
+          if(raw){
+            var arr = JSON.parse(raw) || [];
+            if(arr.length){ return arr; }
+          }
+        }catch(e){}
+        return [clone(defaultPlayerData)];
+      }
+      function saveProfiles(arr){ try{ localStorage.setItem(LS_PROFILES, JSON.stringify(arr)); }catch(e){} }
+      function getCurrentId(){ return localStorage.getItem(LS_CURRENT) || (profiles[0] && profiles[0].id); }
+      function setCurrentId(id){ try{ localStorage.setItem(LS_CURRENT, id); }catch(e){} }
+      function findById(id){ for(var i=0;i<profiles.length;i++){ if(profiles[i].id===id) return profiles[i]; } return null; }
+      function clone(o){ return JSON.parse(JSON.stringify(o)); }
+
+      var profiles = loadProfiles();
+      if(!profiles[0].id){ profiles[0].id = String(Date.now()); saveProfiles(profiles); }
+      var currentId = getCurrentId();
+      if(!findById(currentId)){ currentId = profiles[0].id; setCurrentId(currentId); }
+      var playerData = clone(findById(currentId));
+
+      // Helpers
+      function $(s){ return document.querySelector(s); }
+
+      // --- UI: profile select & compare selects ---
+      var profileSelect = document.getElementById('profileSelect');
+      var cmpA = document.getElementById('cmpA');
+      var cmpB = document.getElementById('cmpB');
+
+      function renderProfileSelect(){
+        if(!profileSelect && !cmpA && !cmpB) return;
+        var html = [];
+        for(var i=0;i<profiles.length;i++){
+          var p = profiles[i];
+          var opt = '<option value="'+p.id+'"'+(p.id===currentId?' selected':'')+'>'+p.name+' ('+p.gradYear+')</option>';
+          html.push(opt);
+        }
+        if(profileSelect){ profileSelect.innerHTML = html.join(''); }
+        if(cmpA){ cmpA.innerHTML = html.join(''); }
+        if(cmpB){ cmpB.innerHTML = html.join(''); }
+      }
+
+      // --- RENDERERS ---
+      function render(){
+        var headshot = document.getElementById('headshot');
+        if(headshot){ headshot.innerHTML = '<img src="'+playerData.headshotUrl+'" alt="'+playerData.name+' headshot"/>'; }
+
+        var statusLabel = document.getElementById('statusLabel');
+        if(statusLabel) statusLabel.textContent = playerData.status;
+        var gradYear = document.getElementById('gradYear');
+        if(gradYear) gradYear.textContent = 'Class of ' + playerData.gradYear;
+
+        var badgeRow = document.getElementById('badgeRow');
+        if(badgeRow){
+          var badgeHtml = [];
+          var i;
+          for(i=0;i<(playerData.badges||[]).length;i++){
+            var b = playerData.badges[i];
+            badgeHtml.push('<span class="badge"><svg aria-hidden="true"><use href="#'+(b.icon||'medal')+'"/></svg>'+b.label+'</span>');
+          }
+          badgeRow.innerHTML = badgeHtml.join('');
+        }
+
+        var meta = [
+          {k:'Name', v: playerData.name, id:'player-name'},
+          {k:'Position', v: playerData.position},
+          {k:'High School', v: playerData.highSchool},
+          {k:'Location', v: playerData.city + ', ' + playerData.state},
+          {k:'Height', v: playerData.height},
+          {k:'Weight', v: playerData.weight},
+          {k:'Foot', v: playerData.foot},
+          {k:'Surface', v: playerData.surface}
+        ];
+        var metaWrap = document.getElementById('playerMeta');
+        if(metaWrap){
+          var mOut = [];
+          for(var j=0;j<meta.length;j++){
+            var mm = meta[j];
+            mOut.push('<div class="meta-row"><span class="chip" aria-labelledby="'+(mm.id||'')+'"><strong>'+mm.k+':</strong> '+mm.v+'</span></div>');
+          }
+          metaWrap.innerHTML = mOut.join('');
+        }
+
+        function starRow(value, max){
+          var html = [];
+          for(var s=1; s<=max; s++){
+            var diff = value - s;
+            var fill = '#20242e';
+            var half = false;
+            if(diff >= 0) fill = '#f5c245';
+            else if(diff > -1){ half = true; }
+            html.push('<span class="stars-item" style="position:relative;display:inline-block">\
+<svg aria-hidden="true" style="color:'+fill+'"><use href="#star"/></svg>'+ (half? '<svg aria-hidden="true" style="position:absolute;left:0;top:0;clip-path:inset(0 50% 0 0);color:#f5c245"><use href="#star"/></svg>':'') + '</span>');
+          }
+          return '<div class="stars" role="img" aria-label="'+value+' out of '+max+' stars">'+html.join('')+'</div>';
+        }
+
+        var ratingsWrap = document.getElementById('ratings');
+        if(ratingsWrap){
+          var rHtml = [];
+          for(var r=0;r<(playerData.ratings||[]).length;r++){
+            var rr = playerData.ratings[r];
+            rHtml.push('<div class="rating-row">\
+<div class="rating-label"><strong>'+rr.source+'</strong></div>'+starRow(Number(rr.value)||0, Number(rr.max)||5)+'<div class="muted">'+rr.value+' / '+rr.max+'</div></div>');
+          }
+          ratingsWrap.innerHTML = rHtml.join('');
+        }
+
+        var kpiRow = document.getElementById('kpiRow');
+        if(kpiRow){
+          var kHtml = [];
+          for(var k=0;k<(playerData.stats2025||[]).length;k++){
+            var kv = playerData.stats2025[k];
+            kHtml.push('<div class="kpi"><div class="v">'+kv.value+'</div><div class="l">'+kv.label+'</div></div>');
+          }
+          kpiRow.innerHTML = kHtml.join('');
+        }
+
+        var timeline = document.getElementById('timeline');
+        function fmt(iso){ return new Date(iso + 'T12:00:00').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}); }
+        if(timeline){
+          var tHtml = [];
+          for(var t=0;t<(playerData.timeline||[]).length;t++){
+            var tv = playerData.timeline[t];
+            tHtml.push('<div class="t-item"><svg class="t-ic" aria-hidden="true"><use href="#calendar"/></svg><div><div style="font-weight:700">'+tv.label+'</div><div class="muted">'+fmt(tv.date)+'</div></div></div>');
+          }
+          timeline.innerHTML = tHtml.join('');
+        }
+
+        var links = document.getElementById('links');
+        if(links){
+          var lHtml = [];
+          for(var li=0;li<(playerData.links||[]).length;li++){
+            var lv = playerData.links[li];
+            lHtml.push('<a class="link" href="'+lv.url+'" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true" width="18" height="18"><use href="#ext"/></svg> '+lv.label+'</a>');
+          }
+          links.innerHTML = lHtml.join('');
+        }
+      }
+
+      // --- COMPARE ---
+      function getRating(profile, source){
+        var rs = profile.ratings||[]; for(var i=0;i<rs.length;i++){ if(rs[i].source===source){ return rs[i]; } } return {source:source, value:0, max:5};
+      }
+      function getStat(profile, label){
+        var ss = profile.stats2025||[]; for(var i=0;i<ss.length;i++){ if(ss[i].label===label){ return ss[i].value; } } return '-';
+      }
+      function renderCompare(){
+        var idA = (cmpA && cmpA.value) ? cmpA.value : null;
+        var idB = (cmpB && cmpB.value) ? cmpB.value : null;
+        if(!idA || !idB || idA===idB) { document.getElementById('cmpCard').innerHTML = '<div class="muted">Select two different players to compare.</div>'; return; }
+        var A = findById(idA), B = findById(idB);
+        if(!A||!B){ document.getElementById('cmpCard').innerHTML = '<div class="muted">Players not found.</div>'; return; }
+
+        function starStr(v,m){
+          var html=[]; for(var i=1;i<=m;i++){ var d=v-i, f='#20242e', h=false; if(d>=0) f='#f5c245'; else if(d>-1) h=true; html.push('<span style="position:relative;display:inline-block"><svg style="width:18px;height:18px;color:'+f+'"><use href="#star"/></svg>'+(h?'<svg style="position:absolute;left:0;top:0;clip-path:inset(0 50% 0 0);color:#f5c245;width:18px;height:18px"><use href="#star"/></svg>':'')+'</span>'); } return '<span class="stars" aria-label="'+v+' out of '+m+' stars">'+html.join('')+'</span>'; }
+
+        var labels = ["KT Recruiting","Kohl's Kicking","Chris Sailer"];
+        var kpis = ["FGM / FGA","FG Long","XPM / XPA","Punt Avg"];
+
+        var left = [];
+        var right = [];
+
+        left.push('<div class="cmp-card"><div class="cmp-hd"><div class="pic"><img alt="'+A.name+'" src="'+A.headshotUrl+'"/></div><div><div style="font-weight:800">'+A.name+'</div><div class="muted">'+A.position+' • '+A.highSchool+'</div></div></div>');
+        right.push('<div class="cmp-card"><div class="cmp-hd"><div class="pic"><img alt="'+B.name+'" src="'+B.headshotUrl+'"/></div><div><div style="font-weight:800">'+B.name+'</div><div class="muted">'+B.position+' • '+B.highSchool+'</div></div></div>');
+
+        // Ratings comparison
+        for(var i=0;i<labels.length;i++){
+          var ra = getRating(A, labels[i]);
+          var rb = getRating(B, labels[i]);
+          left.push('<div class="cmp-row"><span class="label">'+labels[i]+'</span>'+starStr(ra.value, ra.max)+'</div>');
+          right.push('<div class="cmp-row"><span class="label">'+labels[i]+'</span>'+starStr(rb.value, rb.max)+'</div>');
+        }
+        // KPIs
+        for(var k=0;k<kpis.length;k++){
+          left.push('<div class="cmp-row"><span class="label">'+kpis[k]+'</span><span>'+getStat(A,kpis[k])+'</span></div>');
+          right.push('<div class="cmp-row"><span class="label">'+kpis[k]+'</span><span>'+getStat(B,kpis[k])+'</span></div>');
+        }
+
+        left.push('</div>');
+        right.push('</div>');
+
+        document.getElementById('cmpCard').innerHTML = '<div class="cmp-grid">'+ left.join('') + right.join('') + '</div>';
+      }
+
+      // --- ADMIN ---
+      var ADMIN_PASS = 'kick';
+      var adminRequested = (location.hash.indexOf('admin') !== -1);
+      var adminGranted = false;
+      if(adminRequested){
+        try{ var entered = window.prompt('Enter admin passcode'); adminGranted = (entered === ADMIN_PASS); if(!adminGranted){ console.warn('Admin passcode incorrect. Viewer mode.'); } }catch(e){}
+      }
+      var isAdmin = adminRequested && adminGranted;
+
+      var gearBtn = document.getElementById('gearBtn');
+      var drawer = document.getElementById('drawer');
+      var closeDrawer = document.getElementById('closeDrawer');
+      var testPanel = document.getElementById('testPanel');
+
+      function setAdminUI(){
+        var label = document.getElementById('viewModeLabel');
+        if(label) label.textContent = isAdmin ? 'Admin Mode' : 'Viewer Template';
+        if(isAdmin && gearBtn){ gearBtn.classList.remove('admin-toggle'); }
+        else if(gearBtn){ gearBtn.classList.add('admin-toggle'); }
+        if(isAdmin && testPanel){ testPanel.style.display = 'block'; }
+        else if(testPanel){ testPanel.style.display = 'none'; }
+      }
+
+      function openDrawer(){ if(drawer){ drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false'); } }
+      function closeDrawerFn(){ if(drawer){ drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); } }
+
+      if(gearBtn) gearBtn.addEventListener('click', openDrawer);
+      if(closeDrawer) closeDrawer.addEventListener('click', closeDrawerFn);
+
+      function fillForm(){
+        function g(id){ return document.getElementById(id); }
+        var d = playerData;
+        if(g('f_status')) g('f_status').value = d.status || '';
+        if(g('f_grad')) g('f_grad').value = d.gradYear || '';
+        if(g('f_headshot')) g('f_headshot').value = d.headshotUrl || '';
+        if(g('f_name')) g('f_name').value = d.name || '';
+        if(g('f_pos')) g('f_pos').value = d.position || '';
+        if(g('f_hs')) g('f_hs').value = d.highSchool || '';
+        if(g('f_city')) g('f_city').value = d.city || '';
+        if(g('f_state')) g('f_state').value = d.state || '';
+        if(g('f_height')) g('f_height').value = d.height || '';
+        if(g('f_weight')) g('f_weight').value = d.weight || '';
+        if(g('f_foot')) g('f_foot').value = d.foot || '';
+        if(g('f_surface')) g('f_surface').value = d.surface || '';
+        if(g('f_badges')){
+          var badgeStr = [];
+          for(var b=0;b<(d.badges||[]).length;b++){
+            var bb = d.badges[b];
+            badgeStr.push((bb.label||'')+'|'+(bb.icon||'medal'));
+          }
+          g('f_badges').value = badgeStr.join(', ');
+        }
+        var r = d.ratings||[];
+        var rMap = { 'KT Recruiting':'f_r_kt', "Kohl's Kicking":'f_r_kohls', 'Chris Sailer':'f_r_cs' };
+        for(var i=0;i<r.length;i++){
+          var rr = r[i]; var id = rMap[rr.source]; if(id && document.getElementById(id)) document.getElementById(id).value = (rr.value + '/' + rr.max);
+        }
+        if(g('f_stats')){
+          var sArr = []; for(var s=0;s<(d.stats2025||[]).length;s++){ var sv = d.stats2025[s]; sArr.push(sv.label+':'+sv.value); }
+          g('f_stats').value = sArr.join(', ');
+        }
+        if(g('f_timeline')){
+          var tArr = []; for(var t=0;t<(d.timeline||[]).length;t++){ var tv = d.timeline[t]; tArr.push(tv.date+'|'+tv.label);} g('f_timeline').value = tArr.join(', ');
+        }
+        if(g('f_links')){
+          var lArr = []; for(var l=0;l<(d.links||[]).length;l++){ var lv = d.links[l]; lArr.push(lv.label+'|'+lv.url);} g('f_links').value = lArr.join(', ');
+        }
+      }
+
+      function parsePairs(str, sep){ if(sep===void 0) sep = ','; return (str||'').split(sep).map(function(x){return x.trim();}).filter(Boolean); }
+
+      function saveFromForm(){
+        function gv(id){ var el = document.getElementById(id); return el? el.value.trim() : ''; }
+        var next = clone(playerData);
+        next.status = gv('f_status') || playerData.status;
+        next.gradYear = Number(gv('f_grad')) || playerData.gradYear;
+        next.headshotUrl = gv('f_headshot') || playerData.headshotUrl;
+        next.name = gv('f_name') || playerData.name;
+        next.position = gv('f_pos') || playerData.position;
+        next.highSchool = gv('f_hs') || playerData.highSchool;
+        next.city = gv('f_city') || playerData.city;
+        next.state = gv('f_state') || playerData.state;
+        next.height = gv('f_height') || playerData.height;
+        next.weight = gv('f_weight') || playerData.weight;
+        next.foot = gv('f_foot') || playerData.foot;
+        next.surface = gv('f_surface') || playerData.surface;
+        next.badges = (function(){ var out = []; var arr = parsePairs(gv('f_badges')); for(var i=0;i<arr.length;i++){ var parts = arr[i].split('|'); out.push({label:(parts[0]||'').trim(), icon:(parts[1]||'medal').trim()}); } return out; })();
+        next.ratings = (function(){ function parseRating(s,label,defMax){ var parts=(s||'').split('/'); var v = Number((parts[0]||'').trim())||0; var m = Number((parts[1]||'').trim())||defMax; return { source: label, value: v, max: m }; } return [ parseRating(gv('f_r_kt'),'KT Recruiting',5), parseRating(gv('f_r_kohls'),"Kohl's Kicking",5), parseRating(gv('f_r_cs'),'Chris Sailer',6) ]; })();
+        next.stats2025 = (function(){ var out=[]; var arr=parsePairs(gv('f_stats')); for(var i=0;i<arr.length;i++){ var idx=arr[i].indexOf(':'); var label=idx>-1? arr[i].slice(0,idx).trim():arr[i].trim(); var value=idx>-1? arr[i].slice(idx+1).trim():''; out.push({label:label, value:value}); } return out; })();
+        next.timeline = (function(){ var out=[]; var arr=parsePairs(gv('f_timeline')); for(var i=0;i<arr.length;i++){ var p=arr[i].split('|'); out.push({date:(p[0]||'').trim(), label:(p[1]||'').trim()}); } return out; })();
+        next.links = (function(){ var out=[]; var arr=parsePairs(gv('f_links')); for(var i=0;i<arr.length;i++){ var p=arr[i].split('|'); out.push({label:(p[0]||'Link').trim(), url:(p[1]||'#').trim()}); } return out; })();
+
+        // persist into profiles array
+        for(var i=0;i<profiles.length;i++){ if(profiles[i].id===playerData.id){ profiles[i]=next; break; } }
+        playerData = clone(next);
+        saveProfiles(profiles); setCurrentId(playerData.id);
+        render(); renderProfileSelect(); renderCompare();
+      }
+
+      // Export / Import / Reset / Profile ops
+      var saveBtn = document.getElementById('saveBtn');
+      var exportBtn = document.getElementById('exportBtn');
+      var importInput = document.getElementById('importInput');
+      var resetBtn = document.getElementById('resetBtn');
+      var printBtn = document.getElementById('printBtn');
+      var newBtn = document.getElementById('newProfileBtn');
+      var dupBtn = document.getElementById('duplicateProfileBtn');
+      var delBtn = document.getElementById('deleteProfileBtn');
+      var compareBtn = document.getElementById('compareBtn');
+
+      if(saveBtn) saveBtn.addEventListener('click', saveFromForm);
+      if(exportBtn) exportBtn.addEventListener('click', function(){ try{ var blob = new Blob([JSON.stringify(playerData,null,2)], {type:'application/json'}); var url = URL.createObjectURL(blob); var a = document.createElement('a'); a.href = url; a.download = ((playerData.name || 'player').toLowerCase().replace(/\s+/g,'-')) + '.json'; a.click(); URL.revokeObjectURL(url);}catch(e){ alert('Export failed.'); }});
+      if(importInput) importInput.addEventListener('change', function(e){ var file = e.target && e.target.files ? e.target.files[0] : null; if(!file) return; var reader = new FileReader(); reader.onload = function(){ try{ var obj = JSON.parse(String(reader.result||'{}')); if(!obj.id) obj.id = String(Date.now()); profiles.push(obj); saveProfiles(profiles); currentId = obj.id; setCurrentId(currentId); playerData = clone(obj); render(); renderProfileSelect(); fillForm(); renderCompare(); } catch(err){ alert('Invalid JSON'); } }; reader.readAsText(file); });
+      if(resetBtn) resetBtn.addEventListener('click', function(){ if(confirm('Reset CURRENT profile to the default template?')){ var idx=-1; for(var i=0;i<profiles.length;i++){ if(profiles[i].id===playerData.id){ idx=i; break; } } if(idx>-1){ var fresh = clone(defaultPlayerData); fresh.id = profiles[idx].id; fresh.name = profiles[idx].name; profiles[idx] = fresh; playerData = clone(fresh); saveProfiles(profiles); render(); fillForm(); } }});
+      if(printBtn) printBtn.addEventListener('click', function(){ try{ window.print(); }catch(e){ alert('Print not available in this context.'); } });
+      if(newBtn) newBtn.addEventListener('click', function(){ var name = prompt('Player full name'); if(!name){ return; } var p = clone(defaultPlayerData); p.id = String(Date.now()); p.name = name; profiles.push(p); saveProfiles(profiles); currentId = p.id; setCurrentId(currentId); playerData = clone(p); render(); renderProfileSelect(); fillForm(); renderCompare(); });
+      if(dupBtn) dupBtn.addEventListener('click', function(){ var p = clone(playerData); p.id = String(Date.now()); p.name = p.name + ' (copy)'; profiles.push(p); saveProfiles(profiles); currentId = p.id; setCurrentId(currentId); playerData = clone(p); render(); renderProfileSelect(); fillForm(); renderCompare(); });
+      if(delBtn) delBtn.addEventListener('click', function(){ if(profiles.length<=1){ alert('At least one profile must remain.'); return; } if(confirm('Delete "'+playerData.name+'"?')){ var idx=-1; for(var i=0;i<profiles.length;i++){ if(profiles[i].id===playerData.id){ idx=i; break; } } if(idx>-1){ profiles.splice(idx,1); saveProfiles(profiles); currentId = profiles[0].id; setCurrentId(currentId); playerData = clone(findById(currentId)); render(); renderProfileSelect(); fillForm(); renderCompare(); } }});
+      if(profileSelect) profileSelect.addEventListener('change', function(){ var id = profileSelect.value; var p = findById(id); if(p){ currentId = id; setCurrentId(id); playerData = clone(p); render(); fillForm(); }});
+      if(compareBtn) compareBtn.addEventListener('click', function(){ var sec = document.getElementById('compareSection'); if(sec){ sec.style.display = (sec.style.display==='none' || !sec.style.display)? 'block':'none'; }});
+      if(cmpA) cmpA.addEventListener('change', renderCompare);
+      if(cmpB) cmpB.addEventListener('change', renderCompare);
+
+      // --- SELF-TESTS ---
+      function runTests(){
+        var results = [];
+        function assert(name, cond){ results.push({name:name, pass: !!cond}); }
+
+        // Existing tests
+        assert('DOM is loaded', document.readyState !== 'loading');
+        assert('Name rendered', (document.body.textContent||'').indexOf(playerData.name) !== -1);
+        assert('Ratings rows match data', document.querySelectorAll('.rating-row').length === (playerData.ratings||[]).length);
+        assert('KPI count matches data', document.querySelectorAll('.kpi').length === (playerData.stats2025||[]).length);
+        assert('Timeline count matches data', document.querySelectorAll('.t-item').length === (playerData.timeline||[]).length);
+        var starTestDiv=document.createElement('div'); (function(){ var v=2.5,m=5; var html=[]; for(var i=1;i<=m;i++){ var d=v-i, f='#20242e', h=false; if(d>=0) f='#f5c245'; else if(d>-1) h=true; html.push('<span class=\'stars-item\'><svg style=\'color:'+f+'\'><use href=\'#star\'/></svg>'+(h?'<svg style=\'position:absolute;left:0;top:0;clip-path:inset(0 50% 0 0);color:#f5c245\'><use href=\'#star\'/></svg>':'')+'</span>'); } starTestDiv.innerHTML = '<div class=\'stars\' role=\'img\' aria-label=\''+v+' out of '+m+' stars\'>'+html.join('')+'</div>'; })();
+        assert('starRow aria-label for 2.5/5', starTestDiv.querySelector('[aria-label="2.5 out of 5 stars"]')!=null);
+        var btn = document.getElementById('gearBtn'); var adminReq = (location.hash.indexOf('admin') !== -1); var adminGateOk = (!adminReq) ? btn.classList.contains('admin-toggle') : (isAdmin ? !btn.classList.contains('admin-toggle') : btn.classList.contains('admin-toggle')); assert('Admin gate respected', adminGateOk);
+        var rows = document.querySelectorAll('.rating-row'); if(rows.length>=3){ var aria1 = rows[0].querySelector('.stars'); var aria2 = rows[1].querySelector('.stars'); var aria3 = rows[2].querySelector('.stars'); assert('KT 5/5', aria1 && aria1.getAttribute('aria-label')==='5 out of 5 stars'); assert("Kohl's 5/5", aria2 && aria2.getAttribute('aria-label')==='5 out of 5 stars'); assert('Sailer 6/6', aria3 && aria3.getAttribute('aria-label')==='6 out of 6 stars'); } else { assert('Default ratings present', false); }
+        assert('Print button exists', !!document.getElementById('printBtn'));
+        
+        // New tests for multi-profile & compare
+        assert('Profile select exists', !!document.getElementById('profileSelect'));
+        assert('Profiles array >= 1', Array.isArray(profiles) && profiles.length>=1);
+        // Create a temporary second profile (non-destructive) to test compare rendering
+        (function(){
+          if(profiles.length===1){
+            var temp=clone(profiles[0]); temp.id='temp2'; temp.name = temp.name+' B';
+            var html = '<option value="'+profiles[0].id+'">X</option><option value="'+temp.id+'">Y</option>';
+            var ca=document.getElementById('cmpA'), cb=document.getElementById('cmpB'); if(ca&&cb){ ca.innerHTML=html; cb.innerHTML=html; ca.value=profiles[0].id; cb.value=temp.id; }
+            renderCompare();
+            var cmp = document.getElementById('cmpCard');
+            assert('Compare renders two columns', !!cmp && cmp.innerHTML.indexOf('cmp-grid')!==-1);
+          } else {
+            var ca2=document.getElementById('cmpA'), cb2=document.getElementById('cmpB'); if(ca2&&cb2){ ca2.value=profiles[0].id; cb2.value=profiles[profiles.length-1].id; renderCompare(); var cmp2=document.getElementById('cmpCard'); assert('Compare renders two columns', !!cmp2 && cmp2.innerHTML.indexOf('cmp-grid')!==-1); }
+          }
+        })();
+
+        var list = document.getElementById('testResults'); if(list){ list.innerHTML=''; for(var i=0;i<results.length;i++){ var li = document.createElement('li'); li.textContent = (results[i].pass ? '✅ ' : '❌ ') + results[i].name; list.appendChild(li);} }
+        return results.every(function(r){return r.pass;});
+      }
+
+      var runTestsBtn = document.getElementById('runTestsBtn'); if(runTestsBtn) runTestsBtn.addEventListener('click', runTests);
+
+      // Init
+      render();
+      renderProfileSelect();
+      setAdminUI();
+      if(isAdmin){ fillForm(); setTimeout(openDrawer, 200); }
+      renderCompare();
+      runTests();
+    });
+  })();
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="brand-bar">
+      <div class="brand">
+        <div class="logo">KT</div>
+        <div>
+          <div class="title">KT Recruiting</div>
+          <div class="muted" style="font-size:12px">Elite Specialists • K/P/LS</div>
+        </div>
+      </div>
+      <div class="top-actions">
+        <select id="profileSelect" title="Select Player"></select>
+        <button id="compareBtn" title="Toggle Comparison">Compare Players</button>
+        <button id="printBtn" title="Print or Save as PDF">Print / PDF</button>
+        <div class="watermark muted" id="viewModeLabel">Viewer Template</div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT COLUMN -->
+      <section class="card profile" aria-labelledby="player-name">
+        <div class="hd">
+          <div class="pill"><span class="dot"></span><span id="statusLabel">Active Recruit</span></div>
+          <div class="muted" id="gradYear">Class of 2026</div>
+        </div>
+        <div class="headshot" id="headshot" aria-label="Player headshot"></div>
+        <div class="badge-row" id="badgeRow"></div>
+        <div class="player-meta" id="playerMeta"></div>
+      </section>
+
+      <!-- RIGHT COLUMN -->
+      <div style="display:grid; gap:24px">
+        <section class="card ratings" aria-labelledby="ratings-heading">
+          <div class="hd"><h2 id="ratings-heading" style="margin:0">Ratings</h2></div>
+          <div id="ratings"></div>
+        </section>
+
+        <section class="card panel" aria-labelledby="season-stats-heading">
+          <div class="hd"><h2 id="season-stats-heading" style="margin:0">2025 Season Stats</h2></div>
+          <div class="kpi-row" id="kpiRow"></div>
+        </section>
+
+        <section class="card panel" aria-labelledby="timeline-heading">
+          <div class="hd"><h2 id="timeline-heading" style="margin:0">Recruiting Timeline</h2></div>
+          <div class="timeline" id="timeline"></div>
+        </section>
+
+        <section class="card panel" aria-labelledby="links-heading">
+          <div class="hd"><h2 id="links-heading" style="margin:0">Links & Media</h2></div>
+          <div class="links" id="links"></div>
+        </section>
+
+        <!-- Compare -->
+        <section id="compareSection" class="card panel compare" style="display:none" aria-labelledby="compare-heading">
+          <div class="hd" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <h2 id="compare-heading" style="margin:0">Head‑to‑Head Comparison</h2>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="sr-only" for="cmpA">Player A</label>
+              <select id="cmpA" title="Player A"></select>
+              <label class="sr-only" for="cmpB">Player B</label>
+              <select id="cmpB" title="Player B"></select>
+              <span class="muted" style="font-size:12px">Pick two players</span>
+            </div>
+          </div>
+          <div id="cmpCard"></div>
+        </section>
+
+        <!-- Self-test panel (Admin Mode only) -->
+        <section id="testPanel" class="card panel" aria-labelledby="tests-heading">
+          <div class="hd" style="display:flex;align-items:center;gap:12px;justify-content:space-between">
+            <h2 id="tests-heading" style="margin:0">Self‑tests</h2>
+            <button id="runTestsBtn" class="btn">Run Tests</button>
+          </div>
+          <ul id="testResults" class="muted"></ul>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin gear (only in admin mode) -->
+  <button id="gearBtn" class="gear admin-toggle" title="Open Admin" aria-label="Open Admin">⚙️</button>
+
+  <!-- Right drawer admin -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <div class="bar">
+      <strong>Admin • Edit Player</strong>
+      <button id="closeDrawer" class="btn">Close</button>
+    </div>
+    <div class="form">
+      <div class="field twocol">
+        <div class="field"><label>Status</label><input id="f_status" placeholder="Active Recruit"></div>
+        <div class="field"><label>Grad Year</label><input id="f_grad" type="number" placeholder="2026"></div>
+      </div>
+      <div class="field"><label>Headshot URL</label><input id="f_headshot" placeholder="https://..."></div>
+      <div class="twocol">
+        <div class="field"><label>First & Last Name</label><input id="f_name" placeholder="Player Name"></div>
+        <div class="field"><label>Position</label><input id="f_pos" placeholder="K / P"></div>
+      </div>
+      <div class="twocol">
+        <div class="field"><label>High School</label><input id="f_hs" placeholder="Fox Chapel HS"></div>
+        <div class="field"><label>City</label><input id="f_city" placeholder="Pittsburgh"></div>
+      </div>
+      <div class="twocol">
+        <div class="field"><label>State</label><input id="f_state" placeholder="PA"></div>
+        <div class="field"><label>Foot</label><input id="f_foot" placeholder="Right"></div>
+      </div>
+      <div class="twocol">
+        <div class="field"><label>Height</label><input id="f_height" placeholder="6'0&quot;"></div>
+        <div class="field"><label>Weight</label><input id="f_weight" placeholder="185 lb"></div>
+      </div>
+      <div class="twocol">
+        <div class="field"><label>Surface</label><input id="f_surface" placeholder="Off a Tee"></div>
+        <div class="field"><label>Badges (Label|icon, comma-separated)</label><input id="f_badges" placeholder="KT Certified|medal, NFL Potential|shield"></div>
+      </div>
+
+      <hr style="border-color:rgba(255,255,255,.08);margin:14px 0">
+      <div class="twocol">
+        <div class="field"><label>KT Rating (value/max)</label><input id="f_r_kt" placeholder="5/5"></div>
+        <div class="field"><label>Kohl's Rating (value/max)</label><input id="f_r_kohls" placeholder="5/5"></div>
+      </div>
+      <div class="field"><label>Chris Sailer Rating (value/max, max can be 6)</label><input id="f_r_cs" placeholder="6/6"></div>
+
+      <hr style="border-color:rgba(255,255,255,.08);margin:14px 0">
+      <div class="field"><label>2025 Stats (label:value comma-separated)</label>
+        <input id="f_stats" placeholder="FGM / FGA:12 / 15, FG Long:52 yds, XPM / XPA:31 / 32, Kickoffs:48, Touchbacks:29, Punt Avg:42.8, Best Hang:4.58 s, Inside 20:12">
+      </div>
+      <div class="field"><label>Timeline (YYYY-MM-DD|Label, comma-separated)</label>
+        <input id="f_timeline" placeholder="2025-03-12|First D1 Offer, 2025-04-05|Unofficial Visit, 2025-06-22|Official Visit, 2025-07-18|Committed, 2025-12-18|Signed NLI">
+      </div>
+      <div class="field"><label>Links (Label|https, comma-separated)</label>
+        <input id="f_links" placeholder="Hudl|https://..., Twitter|https://..., Instagram|https://...">
+      </div>
+
+      <div class="btns">
+        <button id="saveBtn" class="btn primary">Save</button>
+        <button id="exportBtn" class="btn">Export JSON</button>
+        <label class="btn" for="importInput">Import JSON</label>
+        <input id="importInput" type="file" accept="application/json" style="display:none"/>
+        <button id="resetBtn" class="btn" title="Reset to template">Reset</button>
+        <button id="newProfileBtn" class="btn">New Profile</button>
+        <button id="duplicateProfileBtn" class="btn">Duplicate</button>
+        <button id="deleteProfileBtn" class="btn" style="border-color:rgba(239,68,68,.35);">Delete</button>
+        <span class="note">Profiles are stored locally in this browser.</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Accessible SVG defs for stars -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="star" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2.5l3.09 6.26 6.9 1-5 4.87 1.18 6.87L12 18.77 5.83 21.5 7 14.62 2 9.76l6.9-1L12 2.5z"/>
+    </symbol>
+    <symbol id="medal" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l3 5h5l-4 4 2 7-6-4-6 4 2-7-4-4h5z"/>
+    </symbol>
+    <symbol id="shield" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2l8 4v6c0 5.25-3.44 9.86-8 11-4.56-1.14-8-5.75-8-11V6l8-4z"/>
+    </symbol>
+    <symbol id="calendar" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M7 2h2v2h6V2h2v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3V2zm13 8H4v10h16V10z"/>
+    </symbol>
+    <symbol id="trophy" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19 3h-2V2h-2v1H9V2H7v1H5a1 1 0 0 0-1 1v2a5 5 0 0 0 5 5h.1A4 4 0 0 0 11 13v2H7v2h10v-2h-4v-2c0-.7.2-1.37.9-2H15a5 5 0 0 0 5-5V4a1 1 0 0 0-1-1zm-1 3a3 3 0 0 1-3 3h-1V6h4v0zM6 6h4v3H9a 3 3 0 0 1-3-3z"/>
+    </symbol>
+    <symbol id="ext" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h6v2H7v10h10v-4h2v6H5V5z"/>
+    </symbol>
+  </svg>
+</body>
+</html>
